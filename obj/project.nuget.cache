@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "ZaLtd1lUcHSdQQDZHJ5wTdhEOlDPVStzwNNoWKjiA1Pi75eYsoR1ICGv+DXCjvs1M1iKSlDCKKTUgwU3vTpsAQ==",
+  "success": true,
+  "projectFilePath": "C:\\dotnet\\luaWatcher\\luaWatcher.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Robocop\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\5.0.1\\microsoft.netcore.app.runtime.win-x64.5.0.1.nupkg.sha512",
+    "C:\\Users\\Robocop\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\5.0.1\\microsoft.windowsdesktop.app.runtime.win-x64.5.0.1.nupkg.sha512",
+    "C:\\Users\\Robocop\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\5.0.1\\microsoft.aspnetcore.app.runtime.win-x64.5.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
