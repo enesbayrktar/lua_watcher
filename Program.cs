@@ -21,7 +21,7 @@ namespace luaWatcher
         public static String uri = System.Environment.CurrentDirectory;
         static void Main(string[] args)
         {
-
+            Console.Title = "Lua Watcher (via https://mtasa.com/)";
             using (FileSystemWatcher watcher = new FileSystemWatcher())
             {
                 watcher.Path = uri;
@@ -33,7 +33,7 @@ namespace luaWatcher
 
                 watcher.EnableRaisingEvents = true;
                 Console.WriteLine(welcomeArt);
-                WriteColor("Welcome to [luaWatcher https://github.com/enesbayrktar/luaWatcher]", ConsoleColor.Yellow);
+                WriteColor("Welcome to [luaWatcher https://github.com/enesbayrktar/lua_watcher]", ConsoleColor.Yellow);
                 WriteColor($"Started watching ['{uri}'] with [subfolders.]", ConsoleColor.Yellow);
                 WriteColor("Type ['q'] to stop [luaWatcher].", ConsoleColor.Yellow);
                 Console.WriteLine(" ");
