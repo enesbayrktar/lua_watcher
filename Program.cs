@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -8,6 +8,15 @@ namespace luaWatcher
 {
     class Program
     {
+        public static string welcomeArt = @"
+        .__                                   __         .__
+        |  |  __ _______     __  _  _______ _/  |_  ____ |  |__   ___________
+        |  | |  |  \__  \    \ \/ \/ /\__  \\   __\/ ___\|  |  \_/ __ \_  __ \
+        |  |_|  |  // __ \_   \     /  / __ \|  | \  \___|   Y  \  ___/|  | \/
+        |____/____/(____  /____\/\_/  (____  /__|  \___  >___|  /\___  >__|
+                        \/_____/           \/          \/     \/     \/
+
+        ";
         public static DateTime lastRead = DateTime.MinValue;
         public static String uri = System.Environment.CurrentDirectory;
         static void Main(string[] args)
@@ -23,7 +32,7 @@ namespace luaWatcher
                 watcher.Changed += OnChanged;
 
                 watcher.EnableRaisingEvents = true;
-
+                Console.WriteLine(welcomeArt);
                 WriteColor("Welcome to [luaWatcher https://github.com/enesbayrktar/luaWatcher]", ConsoleColor.Yellow);
                 WriteColor($"Started watching ['{uri}'] with [subfolders.]", ConsoleColor.Yellow);
                 WriteColor("Type ['q'] to stop [luaWatcher].", ConsoleColor.Yellow);
@@ -37,21 +46,23 @@ namespace luaWatcher
             DateTime lastWriteTime = File.GetLastWriteTime(e.FullPath);
             if (lastWriteTime != lastRead)
             {
-                WriteColor($"luaWatcher : '[{e.Name}' {e.ChangeType} {lastRead} {lastWriteTime}]", ConsoleColor.Yellow);
+                WriteColor($"luaWatcher : File changed: '[{e.Name}]' [{e.ChangeType} {lastRead} {lastWriteTime}]", ConsoleColor.Yellow);
 
                 Process luac = new Process();
 
-                luac.StartInfo.FileName   = "luac_mta.exe";
-                luac.StartInfo.Arguments = $"-e3 -o {e.FullPath}c {e.FullPath}";
+                luac.StartInfo.FileName   = "lib/luac_mta.exe";
+                luac.StartInfo.Arguments = $"-e3 -o {e.Name}c {e.Name}";
 
                 luac.Start();
 
-                foreach(string f in Directory.EnumerateFiles(uri, "meta.xml", SearchOption.AllDirectories))
+                string XmlFolder = GetRootFolder(e.Name);
+
+                foreach(string f in Directory.EnumerateFiles(XmlFolder, "meta.xml", SearchOption.AllDirectories))
                 {
                     XmlDocument document = new XmlDocument();
                     document.Load(f);
 
-                    string FormattedName = e.Name.Substring(e.Name.IndexOf($"\\") + 1);
+                    string FormattedName = e.Name.Substring(e.Name.IndexOf($"\\") + 1).Replace("\\", "/");
                     XmlNode node = document.SelectSingleNode($"//script[@src='{FormattedName}']");
                     if (node != null) {
                         node.Attributes["src"].Value = FormattedName + 'c';
@@ -88,6 +99,18 @@ namespace luaWatcher
 
             Console.WriteLine();
 
+        }
+
+        static string GetRootFolder(string path)
+        {
+            while (true)
+            {
+                string temp = Path.GetDirectoryName(path);
+                if (String.IsNullOrEmpty(temp))
+                    break;
+                path = temp;
+            }
+            return path;
         }
     }
 }
